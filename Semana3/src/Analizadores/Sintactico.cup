@@ -1,0 +1,33 @@
+
+
+import java_cup.runtime.Symbol;
+
+parser code {:
+    public void report_error(String message, Object info) {
+        System.err.println("Error sintáctico: " + message);
+    }
+:};
+
+
+/* ===== TERMINALES (tokens) ===== */
+terminal MAS, MENOS, POR, DIV,RAIZ,EXPONENCIAL;
+termianl PAR1, PAR2, CORCHETE1, CORCHETE2;
+terminal IF,NUMERO;
+
+
+/* ===== NO TERMINALES ===== */
+non terminal Double expr;
+
+
+/* ===== PRECEDENCIA ===== */
+precedence left MAS, MENOS;
+precedence left POR, DIV;
+
+expr ::=
+      expr MAS expr   {: RESULT = $1 + $3; :}
+    | expr MENOS expr {: RESULT = $1 - $3; :}
+    | expr POR expr   {: RESULT = $1 * $3; :}
+    | expr DIV expr   {: RESULT = $1 / $3; :}
+    | PA expr PC      {: RESULT = $2; :}
+    | NUMERO          {: RESULT = $1; :}
+    ;
