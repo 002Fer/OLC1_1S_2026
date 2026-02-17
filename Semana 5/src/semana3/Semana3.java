@@ -30,7 +30,20 @@ public class Semana3 {
      public static void main(String[] args) {
         // TODO code application logic here
         try {
-            String texto = "imprimir(\"hola\"); imprimir (5+5/2);";
+            String texto = """
+                           database universidad { 
+                           store at \"universidad.json\"; 
+                           }; 
+                           database ejemplo { 
+                           store at \"ejemplo.json\"; 
+                           }; 
+                           database compi1 {
+                           store at \"compi1.json\"; 
+                           }; 
+                          use ejemplo;
+                           
+                          
+                           """;
             parser p = new parser(new scanner(new BufferedReader(new StringReader(texto))));
             var resultado = p.parse();
             System.out.println(resultado.value);
@@ -39,6 +52,7 @@ public class Semana3 {
         }
     
 
-}}
+}
+}
 
 
