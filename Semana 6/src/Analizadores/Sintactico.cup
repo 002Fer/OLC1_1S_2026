@@ -1,0 +1,91 @@
+package Analizadores;
+
+import Estructuras.Database;
+import Estructuras.DatabaseManager;
+import java_cup.runtime.Symbol;
+
+
+parser code
+{:
+    DatabaseManager dbManager = new DatabaseManager();
+    scanner s;
+    parser(scanner s) { this.s = s; }
+
+    public void syntax_error(Symbol s){
+        System.out.println("Error Sintactico en la linea " +
+        (s.left) + " y columna " + (s.right) +
+        ". No se esperaba el componente: " + (s.value) + ".");
+    }
+
+    public void unrecovered_syntax_error(Symbol s){
+        System.out.println("Error Sintactico no recuperable en la linea " +
+        (s.left) + " y columna " + (s.right) +
+        ". No se esperaba el componente: " + (s.value) + ".");
+    }
+
+:}
+
+action code
+{:
+    String consola="";
+:}
+
+
+terminal String CADENA, ENTERO, DECIMAL,CHAR,ID;
+terminal FINCADENA, IMPRIMIR;
+terminal MAS, MENOS, MULT, DIV,PAR1,PAR2, LLAVE1,LLAVE2;
+terminal USE,DATABASE,AT,STORE;
+
+nonterminal INICIO;
+nonterminal INSTRUCCIONES, INSTRUCCION;
+nonterminal Double EXPRESION;
+nonterminal DEF_DATABASE,USE_DATABASE;
+
+//PRECEDENCIAS
+precedence left MAS, MENOS;
+precedence left MULT, DIV;
+
+start with INICIO;
+
+// ESCRIBIR LA GRAMATICA
+INICIO ::= INSTRUCCIONES    {: RESULT=consola; :}
+;
+
+INSTRUCCIONES ::= INSTRUCCIONES INSTRUCCION
+                | INSTRUCCION
+                
+;
+
+INSTRUCCION ::= IMPRIMIR PAR1 EXPRESION:e PAR2 FINCADENA  {: consola+=e+"\n"; :}
+              | IMPRIMIR PAR1 CADENA:c PAR2 FINCADENA     {: consola+=c+"\n"; :}
+              |DEF_DATABASE
+              |USE_DATABASE
+              
+;  
+
+
+DEF_DATABASE::= DATABASE ID:a1 LLAVE1 STORE AT CADENA:a2 FINCADENA LLAVE2 FINCADENA{: 
+                            // Agregar la base de datos al DatabaseManager
+                            dbManager.addDatabase(a1, a2);
+                            System.out.println("Base de datos " + a1 + " definida con archivo: " + a2);
+                        :}
+;
+
+
+
+USE_DATABASE::= USE ID:a FINCADENA   {: 
+                    // Usar la base de datos en el DatabaseManager
+                    dbManager.useDatabase(a);  // Muestra el mensaje en consola
+                :}
+;
+
+
+
+
+EXPRESION ::= EXPRESION:a MAS EXPRESION:b     {: RESULT = a + b; :}
+            | EXPRESION:a MENOS EXPRESION:b   {: RESULT = a - b; :}
+            | EXPRESION:a MULT EXPRESION:b    {: RESULT = a * b; :}
+            | EXPRESION:a DIV EXPRESION:b     {: RESULT = a / b; :}                  
+            | ENTERO:e                        {: RESULT = new Double(e); :}
+            | DECIMAL:e                       {: RESULT = new Double(e); :}
+;

@@ -26,10 +26,9 @@ public class DatabaseManager {
     public void useDatabase(String dbName) {
         if (databases.containsKey(dbName)) {
             currentDatabase = databases.get(dbName);
-            System.out.println("Se esta usando la base de datos: " +"\n" );
-            System.out.println(currentDatabase.getName());
+            System.out.println("Se está usando la base de datos: " + currentDatabase.getName());
         } else {
-            System.out.println("Error: La base de datos '" + dbName + "' no esta definida.");
+            System.out.println("Error: La base de datos '" + dbName + "' no está definida.");
         }
     }
 

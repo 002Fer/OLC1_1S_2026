@@ -9,7 +9,6 @@ import Analizadores.scanner;
 import java.io.BufferedReader;
 import java.io.StringReader;
 
-
 /**
  *
  * @author compu
@@ -31,15 +30,16 @@ public class Semana3 {
      public static void main(String[] args) {
         // TODO code application logic here
         
-
+        javax.swing.SwingUtilities.invokeLater(() -> {
+            new Interfaz.Interfaz().setVisible(true);
+        });
+        /*
         try {
             String texto = """
                            database universidad { 
                            store at \"universidad.json\"; 
                            }; 
-                           database ejemplo { 
-                           store at \"ejemplo.json\"; 
-                           }; 
+                           
                            database compi1 {
                            store at \"compi1.json\"; 
                            }; 
@@ -54,7 +54,7 @@ public class Semana3 {
             System.out.println("Algo salio mal");
         }
     
-
+*/
 }
 }
 
