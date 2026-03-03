@@ -4,7 +4,6 @@ import Estructuras.Database;
 import Estructuras.DatabaseManager;
 import java_cup.runtime.Symbol;
 
-
 parser code
 {:
     DatabaseManager dbManager = new DatabaseManager();

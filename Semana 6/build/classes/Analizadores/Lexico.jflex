@@ -33,6 +33,8 @@ MENOS = "-"
 MULT = "*"
 DIV = "/"
 FINCADENA=";"
+DOSPUNTOS=":"
+COMA=","
 
 PAR1="("
 PAR2=")"
@@ -70,6 +72,12 @@ STORE="store"
 AT="at"
 USE="use"
 
+ADD="add"
+READ="read"
+TABLE="table"
+
+INT="int"
+STRING="string"
 
 %%
 
@@ -85,7 +93,12 @@ USE="use"
 <YYINITIAL> {AT} { return new Symbol(sym.AT, yycolumn, yyline, yytext()); }
 
 <YYINITIAL> {USE} { return new Symbol(sym.USE, yycolumn, yyline, yytext()); }
+<YYINITIAL> {TABLE} { return new Symbol(sym.TABLE, yycolumn, yyline, yytext()); }
+<YYINITIAL> {ADD} { return new Symbol(sym.ADD, yycolumn, yyline, yytext()); }
+<YYINITIAL> {READ} { return new Symbol(sym.READ, yycolumn, yyline, yytext()); }
 
+<YYINITIAL> {INT} { return new Symbol(sym.INT, yycolumn, yyline, yytext()); }
+<YYINITIAL> {STRING} { return new Symbol(sym.STRING, yycolumn, yyline, yytext()); }
 
 <YYINITIAL> {ID} { return new Symbol(sym.ID, yycolumn, yyline, yytext()); }
 
@@ -120,6 +133,8 @@ USE="use"
 
 <YYINITIAL> {LLAVE2} { return new Symbol(sym.LLAVE2, yycolumn, yyline, yytext()); }
 
+<YYINITIAL> {COMA} { return new Symbol(sym.COMA, yycolumn, yyline, yytext()); }
+<YYINITIAL> {DOSPUNTOS} { return new Symbol(sym.DOSPUNTOS, yycolumn, yyline, yytext()); }
 
 <YYINITIAL> {BLANCOS} {} // Ignorar espacios en blanco
 

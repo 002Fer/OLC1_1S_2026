@@ -3,6 +3,7 @@ package Analizadores;
 import Estructuras.Database;
 import Estructuras.DatabaseManager;
 import java_cup.runtime.Symbol;
+import 
 
 
 parser code
@@ -35,10 +36,11 @@ terminal String CADENA, ENTERO, DECIMAL,CHAR,ID;
 terminal FINCADENA, IMPRIMIR;
 terminal MAS, MENOS, MULT, DIV,PAR1,PAR2, LLAVE1,LLAVE2;
 terminal USE,DATABASE,AT,STORE;
+terminal TABLE,ADD,READ,DOSPUNTOS,COMA, INT, STRING
 
 nonterminal INICIO;
 nonterminal INSTRUCCIONES, INSTRUCCION;
-nonterminal Double EXPRESION;
+nonterminal Object EXPRESION;
 nonterminal DEF_DATABASE,USE_DATABASE;
 
 //PRECEDENCIAS
@@ -85,7 +87,7 @@ USE_DATABASE::= USE ID:a FINCADENA   {:
 EXPRESION ::= EXPRESION:a MAS EXPRESION:b     {: RESULT = a + b; :}
             | EXPRESION:a MENOS EXPRESION:b   {: RESULT = a - b; :}
             | EXPRESION:a MULT EXPRESION:b    {: RESULT = a * b; :}
-            | EXPRESION:a DIV EXPRESION:b     {: RESULT = a / b; :}                  
+            | EXPRESION:a DIV EXPRESION:b     {: RESULT = a / b; :}    
             | ENTERO:e                        {: RESULT = new Double(e); :}
             | DECIMAL:e                       {: RESULT = new Double(e); :}
 ;

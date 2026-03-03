@@ -3,12 +3,18 @@ package Analizadores;
 import Estructuras.Database;
 import Estructuras.DatabaseManager;
 import java_cup.runtime.Symbol;
-import 
 
-
+import Estructuras.Table;
+import java.util.HashMap;
+import java.util.Map;
 parser code
 {:
     DatabaseManager dbManager = new DatabaseManager();
+
+    Map<String, String> camposTemp = new HashMap<>();
+    Map<String, Object> valoresTemp = new HashMap<>();
+    String tablaActual = "";
+
     scanner s;
     parser(scanner s) { this.s = s; }
 
@@ -32,16 +38,20 @@ action code
 :}
 
 
-terminal String CADENA, ENTERO, DECIMAL,CHAR,ID;
+terminal String CADENA, ENTERO, DECIMAL,CHAR,ID, INT,STRING;
 terminal FINCADENA, IMPRIMIR;
 terminal MAS, MENOS, MULT, DIV,PAR1,PAR2, LLAVE1,LLAVE2;
 terminal USE,DATABASE,AT,STORE;
-terminal TABLE,ADD,READ,DOSPUNTOS,COMA, INT, STRING
+terminal COMA,DOSPUNTOS,ADD,READ,TABLE;
 
 nonterminal INICIO;
 nonterminal INSTRUCCIONES, INSTRUCCION;
-nonterminal Object EXPRESION;
+nonterminal Object  EXPRESION;
 nonterminal DEF_DATABASE,USE_DATABASE;
+
+nonterminal DEF_TABLE, LISTA_CAMPOS;
+nonterminal ADD_STMT, LISTA_VALORES;
+nonterminal READ_STMT;
 
 //PRECEDENCIAS
 precedence left MAS, MENOS;
@@ -58,13 +68,63 @@ INSTRUCCIONES ::= INSTRUCCIONES INSTRUCCION
                 
 ;
 
-INSTRUCCION ::= IMPRIMIR PAR1 EXPRESION:e PAR2 FINCADENA  {: consola+=e+"\n"; :}
-              | IMPRIMIR PAR1 CADENA:c PAR2 FINCADENA     {: consola+=c+"\n"; :}
-              |DEF_DATABASE
+INSTRUCCION ::= DEF_DATABASE
               |USE_DATABASE
+              | DEF_TABLE
+              | ADD_STMT
+              | READ_STMT
               
 ;  
 
+DEF_TABLE ::= TABLE ID:a LLAVE1 LISTA_CAMPOS LLAVE2 FINCADENA
+{:
+    dbManager.addTable(a);
+    Table t = dbManager.getTable(a);
+
+    for (Map.Entry<String,String> entry : camposTemp.entrySet()) {
+        t.addField(entry.getKey(), entry.getValue());
+    }
+
+    camposTemp.clear();
+:}
+;
+
+LISTA_CAMPOS ::= LISTA_CAMPOS ID:a DOSPUNTOS INT:b FINCADENA
+{: camposTemp.put(a,(String) b); :}
+|ID:a DOSPUNTOS INT:b FINCADENA
+{: camposTemp.put(a,(String) b); :}
+|LISTA_CAMPOS ID:a DOSPUNTOS STRING:b FINCADENA
+{: camposTemp.put(a, (String) b); :}
+
+|ID:a DOSPUNTOS STRING:b FINCADENA
+{: camposTemp.put(a, (String) b); :}
+;
+
+ADD_STMT ::= ADD ID:a LLAVE1 LISTA_VALORES LLAVE2 FINCADENA
+{:
+    Table t = dbManager.getTable(a);
+    if(t != null){
+        t.addRecord(valoresTemp);
+    }
+    valoresTemp.clear();
+:}
+;
+
+LISTA_VALORES ::= LISTA_VALORES ID:a DOSPUNTOS EXPRESION:b COMA
+{: valoresTemp.put(a, b); :}
+
+|ID:a DOSPUNTOS EXPRESION:b
+{: valoresTemp.put(a,  b); :}
+;
+
+READ_STMT ::= READ ID:a FINCADENA
+{:
+    Table t = dbManager.getTable(a);
+    if(t != null){
+        t.readAll();
+    }
+:}
+;
 
 DEF_DATABASE::= DATABASE ID:a1 LLAVE1 STORE AT CADENA:a2 FINCADENA LLAVE2 FINCADENA{: 
                             // Agregar la base de datos al DatabaseManager
@@ -84,10 +144,9 @@ USE_DATABASE::= USE ID:a FINCADENA   {:
 
 
 
-EXPRESION ::= EXPRESION:a MAS EXPRESION:b     {: RESULT = a + b; :}
-            | EXPRESION:a MENOS EXPRESION:b   {: RESULT = a - b; :}
-            | EXPRESION:a MULT EXPRESION:b    {: RESULT = a * b; :}
-            | EXPRESION:a DIV EXPRESION:b     {: RESULT = a / b; :}    
-            | ENTERO:e                        {: RESULT = new Double(e); :}
+EXPRESION ::=                 
+             ENTERO:e                        {: RESULT = new Double(e); :}
             | DECIMAL:e                       {: RESULT = new Double(e); :}
+            | CADENA:e {: RESULT = e; :}
+          
 ;
