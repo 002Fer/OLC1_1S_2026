@@ -9,7 +9,7 @@ const tablaSimbolo_1 = __importDefault(require("./controller/analizador/simbolo/
 class patronInterpreter {
     start() {
         try {
-            let parser = require('./controllers/analizador/analizador.js');
+            let parser = require('./controller/analizador/analizador.js');
             //let parser =require('./controllers/analizador/analizador.js')
             let ast = new Arbol_1.default(parser.parse('2+2+5;'));
             let tabla = new tablaSimbolo_1.default();

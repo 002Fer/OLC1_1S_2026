@@ -5,7 +5,7 @@ import TablaSimbolo from "./controller/analizador/simbolo/tablaSimbolo"
 class patronInterpreter{
     start():any{
         try{
-            let parser =require('./controllers/analizador/analizador.js')
+            let parser =require('./controller/analizador/analizador.js')
             //let parser =require('./controllers/analizador/analizador.js')
             let ast= new Arbol(parser.parse('2+2+5;'))
             let tabla= new TablaSimbolo()
