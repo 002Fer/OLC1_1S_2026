@@ -2,11 +2,11 @@
 %%
 
 \s+                   /* ignorar espacios */
-[0-9]+("."[0-9]+)?\b  return 'NUMBER';
-"+"                   return '+';
-"-"                   return '-';
-"*"                   return '*';
-"/"                   return '/';
+[0-9]+("."[0-9]+)?\b  return 'Decimal';
+[0-9]+                  return 'Entero';
+"+"                   return 'mas';
+"-"                   return 'menos';
+";"                    return 'puntoComa'
 "("                   return '(';
 ")"                   return ')';
 <<EOF>>               return 'EOF';
@@ -29,3 +29,5 @@ e
     | '(' e ')' { $$ = $2; }
     | NUMBER { $$ = Number(yytext); }
     ;
+
+   

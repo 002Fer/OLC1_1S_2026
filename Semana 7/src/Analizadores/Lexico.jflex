@@ -67,7 +67,7 @@ COMENTARIO_MULTILINEA = "/*"([^*]|\*+[^*/])*"*"+"/"
 
 //PALABRAS RESERVADAS
 IMPRIMIR="imprimir"
-DATABASE="database"
+DATABASE="databaseManager"
 STORE="store"
 AT="at"
 USE="use"
