@@ -11,7 +11,7 @@ class patronInterpreter {
         try {
             let parser = require('./controller/analizador/analizador.js');
             //let parser =require('./controllers/analizador/analizador.js')
-            let ast = new Arbol_1.default(parser.parse('2+2+5;'));
+            let ast = new Arbol_1.default(parser.parse('2+2+5.50;'));
             let tabla = new tablaSimbolo_1.default();
             ast.setTablaGlobal(tabla);
             ast.setConsola("");

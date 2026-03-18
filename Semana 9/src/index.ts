@@ -7,7 +7,7 @@ class patronInterpreter{
         try{
             let parser =require('./controller/analizador/analizador.js')
             //let parser =require('./controllers/analizador/analizador.js')
-            let ast= new Arbol(parser.parse('2+2+5;'))
+            let ast= new Arbol(parser.parse('2+2+5.50;'))
             let tabla= new TablaSimbolo()
             ast.setTablaGlobal(tabla)
             ast.setConsola("")
