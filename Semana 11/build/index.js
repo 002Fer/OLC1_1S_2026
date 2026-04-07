@@ -10,15 +10,22 @@ class patronInterpreter {
     start() {
         try {
             let parser = require('./controller/analizador/analizador.js');
-            //let parser =require('./controllers/analizador/analizador.js')
-            let ast = new Arbol_1.default(parser.parse('2+2+5.50-4;'));
+            let entrada = `
+               var a int = 10
+                fmt.println(5 + a )
+            `;
+            let ast = new Arbol_1.default(parser.parse(entrada));
             let tabla = new tablaSimbolo_1.default();
             ast.setTablaGlobal(tabla);
             ast.setConsola("");
             for (let i of ast.getInstrucciones()) {
-                var resultado = i.interpretar(ast, tabla);
-                console.log(resultado);
+                let resultado = i.interpretar(ast, tabla);
+                if (resultado)
+                    console.log(resultado);
             }
+            console.log("CONSOLA:");
+            console.log(ast.getConsola());
+            console.log("TABLA:");
             console.log(tabla);
         }
         catch (e) {

@@ -1,0 +1,19 @@
+{
+  "name": "semana-9",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build":"tsc -w",
+    "jison": "jison src/controller/analizador/analizador.jison  && move analizador.js build/controller/analizador"
+
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "jison": "^0.4.18"
+  }
+}

@@ -25,7 +25,7 @@
 
 /lex
 
-%left MAS
+%left 'MAS' 'MENOS'
 
 
 %start INICIO
@@ -43,6 +43,7 @@ INSTRUCCION : EXPRESION PUNTO_COMA {$$=$1}
 ;
 
 EXPRESION : EXPRESION MAS EXPRESION  { $$= new Aritmeticas.default(Aritmeticas.OperadoresAritmeticos.SUMA,$1,$3,  @1.first_line, @1.first_column ); }
+    |EXPRESION MENOS EXPRESION { $$= new Aritmeticas.default(Aritmeticas.OperadoresAritmeticos.RESTA,$1,$3,  @1.first_line, @1.first_column ); }
     |ENTERO             {$$= new Nativos.default(new Tipo.default(Tipo.tipoDato.ENTERO),$1, @1.first_line, @1.first_column ); }
     |DECIMAL           {$$= new Nativos.default(new Tipo.default(Tipo.tipoDato.DECIMAL),$1, @1.first_line, @1.first_column ); }
 ;
