@@ -11,8 +11,14 @@ class patronInterpreter {
         try {
             let parser = require('./controller/analizador/analizador.js');
             let entrada = `
-               var a int = 10
-                fmt.println(5 + a )
+
+            
+               for i := 1; i < 10; i += 1 {
+                   if i == 5 {
+                       break
+                   }
+                   fmt.println(i)
+               }
             `;
             let ast = new Arbol_1.default(parser.parse(entrada));
             let tabla = new tablaSimbolo_1.default();
@@ -25,8 +31,6 @@ class patronInterpreter {
             }
             console.log("CONSOLA:");
             console.log(ast.getConsola());
-            console.log("TABLA:");
-            console.log(tabla);
         }
         catch (e) {
             console.log(e);

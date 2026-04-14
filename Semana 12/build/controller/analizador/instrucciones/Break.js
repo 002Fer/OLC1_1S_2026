@@ -32,25 +32,15 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const Instruccion_1 = require("../abstracto/Instruccion");
-const Errores_1 = __importDefault(require("../excepciones/Errores"));
 const Tipo_1 = __importStar(require("../simbolo/Tipo"));
-class AccesoVar extends Instruccion_1.Instruccion {
-    constructor(id, linea, columna) {
+class Break extends Instruccion_1.Instruccion {
+    constructor(linea, columna) {
         super(new Tipo_1.default(Tipo_1.tipoDato.VOID), linea, columna);
-        this.id = id;
     }
     interpretar(arbol, tabla) {
-        let valor = tabla.getVariable(this.id);
-        if (valor == null) {
-            return new Errores_1.default("Semantico", "No se puede acceder al valor de esta variable", this.linea, this.columna);
-        }
-        this.tipoDato = valor.getTipo();
-        return valor.getValor();
+        return this;
     }
 }
-exports.default = AccesoVar;
+exports.default = Break;

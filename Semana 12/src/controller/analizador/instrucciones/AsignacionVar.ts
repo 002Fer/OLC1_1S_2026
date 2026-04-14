@@ -5,9 +5,6 @@ import tablaSimbolo from "../simbolo/tablaSimbolo";
 import Tipo, {tipoDato} from "../simbolo/Tipo";
 
 
-//var id1 entero = 10
-//id = expresion   | hola
-
 export default class AsignacionVar extends Instruccion{
     private id:string
     private expresion:Instruccion
@@ -27,6 +24,7 @@ export default class AsignacionVar extends Instruccion{
         let newValor=this.expresion.interpretar(arbol,tabla)
         if (newValor instanceof Errores) return newValor
 
+        // console.log("Asignando variable:", this.id, "Tipo esperado:", varibale.getTipo().getTipo(), "Tipo obtenido:", this.expresion.tipoDato.getTipo());
         if(this.expresion.tipoDato.getTipo() != varibale.getTipo().getTipo()){
             return new Errores("Semantico", "Los tipos deben de ser iguales", this.linea, this.columna)
         }

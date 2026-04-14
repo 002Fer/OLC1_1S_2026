@@ -5,10 +5,6 @@ import Simbolo from "../simbolo/Simbolo";
 import TablaSimbolo from "../simbolo/tablaSimbolo";
 import  Tipo, {tipoDato}  from "../simbolo/Tipo";
 
-
-//var a entero= 10
-
-//print(a)
 export default class AccesoVar extends Instruccion{
     private id:string
 

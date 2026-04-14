@@ -40,6 +40,9 @@ exports.OperadoresAritmeticos = void 0;
 const Instruccion_1 = require("../abstracto/Instruccion");
 const Errores_1 = __importDefault(require("../excepciones/Errores"));
 const Tipo_1 = __importStar(require("../simbolo/Tipo"));
+//E+E
+//E-E
+//E*E
 class Aritmeticas extends Instruccion_1.Instruccion {
     constructor(operador, linea, columna, operando1, operando2) {
         super(new Tipo_1.default(Tipo_1.tipoDato.ENTERO), linea, columna);
@@ -87,20 +90,29 @@ class Aritmeticas extends Instruccion_1.Instruccion {
                     case Tipo_1.tipoDato.DECIMAL:
                         this.tipoDato.setTipo(Tipo_1.tipoDato.DECIMAL);
                         return parseFloat(op1) + parseFloat(op2);
+                    case Tipo_1.tipoDato.CADENA:
+                        this.tipoDato.setTipo(Tipo_1.tipoDato.CADENA);
+                        return op1.toString() + op2.toString();
                     default:
                         return new Errores_1.default("Semantico", "suma entre operadores no existe", this.linea, this.columna);
                 }
             case Tipo_1.tipoDato.DECIMAL:
                 switch (tipo2) {
                     case Tipo_1.tipoDato.ENTERO:
-                        this.tipoDato.setTipo(Tipo_1.tipoDato.ENTERO);
+                        this.tipoDato.setTipo(Tipo_1.tipoDato.DECIMAL); // Decimal + Entero = Decimal
                         return parseFloat(op1) + parseFloat(op2);
                     case Tipo_1.tipoDato.DECIMAL:
                         this.tipoDato.setTipo(Tipo_1.tipoDato.DECIMAL);
                         return parseFloat(op1) + parseFloat(op2);
+                    case Tipo_1.tipoDato.CADENA:
+                        this.tipoDato.setTipo(Tipo_1.tipoDato.CADENA);
+                        return op1.toString() + op2.toString();
                     default:
                         return new Errores_1.default("Semantico", "suma entre operadores no existe", this.linea, this.columna);
                 }
+            case Tipo_1.tipoDato.CADENA:
+                this.tipoDato.setTipo(Tipo_1.tipoDato.CADENA);
+                return op1.toString() + op2.toString();
         }
     }
     resta(op1, op2) {

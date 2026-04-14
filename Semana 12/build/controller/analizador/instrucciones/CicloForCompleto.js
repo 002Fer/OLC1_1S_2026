@@ -39,18 +39,48 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Instruccion_1 = require("../abstracto/Instruccion");
 const Errores_1 = __importDefault(require("../excepciones/Errores"));
 const Tipo_1 = __importStar(require("../simbolo/Tipo"));
-class AccesoVar extends Instruccion_1.Instruccion {
-    constructor(id, linea, columna) {
+const Break_1 = __importDefault(require("./Break"));
+class CicloForCompleto extends Instruccion_1.Instruccion {
+    constructor(inicializacion, condicion, actualizacion, instrucciones, linea, columna) {
         super(new Tipo_1.default(Tipo_1.tipoDato.VOID), linea, columna);
-        this.id = id;
+        this.inicializacion = inicializacion;
+        this.condicion = condicion;
+        this.actualizacion = actualizacion;
+        this.instrucciones = instrucciones;
     }
     interpretar(arbol, tabla) {
-        let valor = tabla.getVariable(this.id);
-        if (valor == null) {
-            return new Errores_1.default("Semantico", "No se puede acceder al valor de esta variable", this.linea, this.columna);
+        // 1. Ejecutar inicialización
+        let init = this.inicializacion.interpretar(arbol, tabla);
+        if (init instanceof Errores_1.default)
+            return init;
+        // 2. Bucle
+        while (true) {
+            // Evaluamos la condición
+            let cond = this.condicion.interpretar(arbol, tabla);
+            if (cond instanceof Errores_1.default)
+                return cond;
+            if (this.condicion.tipoDato.getTipo() !== Tipo_1.tipoDato.BOOLEAN) {
+                return new Errores_1.default("Semantico", "La condicion del for debe ser booleana", this.linea, this.columna);
+            }
+            // Si es falso, salimos
+            if (!cond)
+                break;
+            // Ejecutamos instrucciones del bloque
+            for (let i of this.instrucciones) {
+                if (i instanceof Instruccion_1.Instruccion) {
+                    let res = i.interpretar(arbol, tabla);
+                    if (res instanceof Errores_1.default)
+                        return res;
+                    if (res instanceof Break_1.default)
+                        return null;
+                }
+            }
+            // Ejecutamos la actualización
+            let update = this.actualizacion.interpretar(arbol, tabla);
+            if (update instanceof Errores_1.default)
+                return update;
         }
-        this.tipoDato = valor.getTipo();
-        return valor.getValor();
+        return null;
     }
 }
-exports.default = AccesoVar;
+exports.default = CicloForCompleto;

@@ -6,8 +6,6 @@ import Simbolo from "../simbolo/Simbolo";
 import TablaSimbolo from "../simbolo/tablaSimbolo";
 import  Tipo, {tipoDato}  from "../simbolo/Tipo";
 
-//print(    cadena|suma|resta|entero|decimal)
-
 export default class Imprimir extends Instruccion{
 
     private expresion:Instruccion

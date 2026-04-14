@@ -39,7 +39,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Instruccion_1 = require("../abstracto/Instruccion");
 const Errores_1 = __importDefault(require("../excepciones/Errores"));
 const Tipo_1 = __importStar(require("../simbolo/Tipo"));
-//print(    cadena|suma|resta|entero|decimal)
 class Imprimir extends Instruccion_1.Instruccion {
     constructor(expresion, linea, columna) {
         super(new Tipo_1.default(Tipo_1.tipoDato.VOID), linea, columna);

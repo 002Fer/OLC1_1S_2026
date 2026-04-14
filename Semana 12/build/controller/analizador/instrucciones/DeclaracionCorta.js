@@ -38,19 +38,28 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const Instruccion_1 = require("../abstracto/Instruccion");
 const Errores_1 = __importDefault(require("../excepciones/Errores"));
+const Simbolo_1 = __importDefault(require("../simbolo/Simbolo"));
 const Tipo_1 = __importStar(require("../simbolo/Tipo"));
-class AccesoVar extends Instruccion_1.Instruccion {
-    constructor(id, linea, columna) {
+class DeclaracionCorta extends Instruccion_1.Instruccion {
+    constructor(id, valor, linea, columna) {
+        // Inicialmente el tipo es VOID, se inferirá en interpretar
         super(new Tipo_1.default(Tipo_1.tipoDato.VOID), linea, columna);
         this.id = id;
+        this.valor = valor;
     }
     interpretar(arbol, tabla) {
-        let valor = tabla.getVariable(this.id);
-        if (valor == null) {
-            return new Errores_1.default("Semantico", "No se puede acceder al valor de esta variable", this.linea, this.columna);
+        // 1. Interpretar la expresión
+        let resValor = this.valor.interpretar(arbol, tabla);
+        if (resValor instanceof Errores_1.default)
+            return resValor;
+        // 2. Obtener el tipo de la expresión
+        this.tipoDato = this.valor.tipoDato;
+        // 3. Crear el símbolo y guardarlo en la tabla
+        let nuevoSimbolo = new Simbolo_1.default(this.tipoDato, this.id, resValor);
+        if (!tabla.setVariable(nuevoSimbolo)) {
+            return new Errores_1.default("Semantico", `La variable '${this.id}' ya ha sido declarada anteriormente`, this.linea, this.columna);
         }
-        this.tipoDato = valor.getTipo();
-        return valor.getValor();
+        return null;
     }
 }
-exports.default = AccesoVar;
+exports.default = DeclaracionCorta;

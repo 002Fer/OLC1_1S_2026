@@ -22,8 +22,8 @@ class Declaracion extends Instruccion_1.Instruccion {
         let resValor = this.valor.interpretar(arbol, tabla);
         if (resValor instanceof Errores_1.default)
             return resValor;
-        if (this.tipoDato.getTipo() != this.tipoDato.getTipo()) {
-            return new Errores_1.default("Semantico", "Error de tipo en la declaracion de la variable, no son del mismo tipo", this.linea, this.columna);
+        if (this.tipoDato.getTipo() != this.valor.tipoDato.getTipo()) {
+            return new Errores_1.default("Semantico", `Error de tipo en la declaracion de la variable ${this.id}, esperado ${this.tipoDato.getTipo()} pero obtenido ${this.valor.tipoDato.getTipo()}`, this.linea, this.columna);
         }
         if (!tabla.setVariable(new Simbolo_1.default(this.tipoDato, this.id, resValor))) {
             return new Errores_1.default("Semantico", "Error de variable ya existe en el entorno", this.linea, this.columna);

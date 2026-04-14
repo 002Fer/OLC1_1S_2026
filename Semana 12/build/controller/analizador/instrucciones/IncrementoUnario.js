@@ -39,18 +39,34 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Instruccion_1 = require("../abstracto/Instruccion");
 const Errores_1 = __importDefault(require("../excepciones/Errores"));
 const Tipo_1 = __importStar(require("../simbolo/Tipo"));
-class AccesoVar extends Instruccion_1.Instruccion {
+class IncrementoUnario extends Instruccion_1.Instruccion {
     constructor(id, linea, columna) {
         super(new Tipo_1.default(Tipo_1.tipoDato.VOID), linea, columna);
         this.id = id;
     }
     interpretar(arbol, tabla) {
-        let valor = tabla.getVariable(this.id);
-        if (valor == null) {
-            return new Errores_1.default("Semantico", "No se puede acceder al valor de esta variable", this.linea, this.columna);
+        // 1. Buscar la variable
+        let variable = tabla.getVariable(this.id);
+        if (variable == null) {
+            return new Errores_1.default("Semantico", `La variable '${this.id}' no existe`, this.linea, this.columna);
         }
-        this.tipoDato = valor.getTipo();
-        return valor.getValor();
+        // 2. Obtener el valor actual
+        let valorActual = variable.getValor();
+        let tipoVariable = variable.getTipo().getTipo();
+        // 3. Validar tipo numérico y realizar el incremento
+        let resultado;
+        if (tipoVariable === Tipo_1.tipoDato.ENTERO) {
+            resultado = parseInt(valorActual) + 1;
+        }
+        else if (tipoVariable === Tipo_1.tipoDato.DECIMAL) {
+            resultado = parseFloat(valorActual) + 1.0;
+        }
+        else {
+            return new Errores_1.default("Semantico", "El operador ++ solo es valido para tipos numericos", this.linea, this.columna);
+        }
+        // 4. Actualizar el valor
+        variable.setValor(resultado);
+        return null;
     }
 }
-exports.default = AccesoVar;
+exports.default = IncrementoUnario;

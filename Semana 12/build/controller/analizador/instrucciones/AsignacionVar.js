@@ -39,8 +39,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Instruccion_1 = require("../abstracto/Instruccion");
 const Errores_1 = __importDefault(require("../excepciones/Errores"));
 const Tipo_1 = __importStar(require("../simbolo/Tipo"));
-//var id1 entero = 10
-//id = expresion   | hola
 class AsignacionVar extends Instruccion_1.Instruccion {
     constructor(id, expresion, linea, columna) {
         super(new Tipo_1.default(Tipo_1.tipoDato.VOID), linea, columna);
@@ -55,6 +53,7 @@ class AsignacionVar extends Instruccion_1.Instruccion {
         let newValor = this.expresion.interpretar(arbol, tabla);
         if (newValor instanceof Errores_1.default)
             return newValor;
+        // console.log("Asignando variable:", this.id, "Tipo esperado:", varibale.getTipo().getTipo(), "Tipo obtenido:", this.expresion.tipoDato.getTipo());
         if (this.expresion.tipoDato.getTipo() != varibale.getTipo().getTipo()) {
             return new Errores_1.default("Semantico", "Los tipos deben de ser iguales", this.linea, this.columna);
         }

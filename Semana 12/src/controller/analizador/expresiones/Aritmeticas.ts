@@ -6,6 +6,10 @@ import Tipo, { tipoDato } from "../simbolo/Tipo";
 
 
 
+//E+E
+//E-E
+//E*E
+
 export default class Aritmeticas extends Instruccion{
         private operando1: Instruccion|undefined
         private operando2: Instruccion|undefined
@@ -67,6 +71,10 @@ export default class Aritmeticas extends Instruccion{
                             this.tipoDato.setTipo(tipoDato.DECIMAL)
                             return parseFloat(op1)+ parseFloat(op2)
 
+                        case tipoDato.CADENA:
+                            this.tipoDato.setTipo(tipoDato.CADENA)
+                            return op1.toString() + op2.toString()
+
                         default:
                             return new Errores("Semantico","suma entre operadores no existe", this.linea, this.columna)
 
@@ -74,17 +82,24 @@ export default class Aritmeticas extends Instruccion{
                 case tipoDato.DECIMAL:
                     switch(tipo2){
                         case tipoDato.ENTERO:
-                            this.tipoDato.setTipo(tipoDato.ENTERO)
+                            this.tipoDato.setTipo(tipoDato.DECIMAL) // Decimal + Entero = Decimal
                             return parseFloat(op1)+ parseFloat(op2)
-
+                        
                         case tipoDato.DECIMAL:
                             this.tipoDato.setTipo(tipoDato.DECIMAL)
                             return parseFloat(op1)+ parseFloat(op2)
+
+                        case tipoDato.CADENA:
+                            this.tipoDato.setTipo(tipoDato.CADENA)
+                            return op1.toString() + op2.toString()
 
                         default:
                             return new Errores("Semantico","suma entre operadores no existe", this.linea, this.columna)
 
                     }
+                case tipoDato.CADENA:
+                    this.tipoDato.setTipo(tipoDato.CADENA)
+                    return op1.toString() + op2.toString()
             }
 
 
@@ -127,7 +142,7 @@ export default class Aritmeticas extends Instruccion{
 
 
         
-        }   
+        }    
     negacion(op1: any) {
         let opU = this.operadorUnico?.tipoDato.getTipo()
         switch (opU) {

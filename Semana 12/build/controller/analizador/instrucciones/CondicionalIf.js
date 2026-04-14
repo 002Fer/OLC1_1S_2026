@@ -39,18 +39,45 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Instruccion_1 = require("../abstracto/Instruccion");
 const Errores_1 = __importDefault(require("../excepciones/Errores"));
 const Tipo_1 = __importStar(require("../simbolo/Tipo"));
-class AccesoVar extends Instruccion_1.Instruccion {
-    constructor(id, linea, columna) {
+const Break_1 = __importDefault(require("./Break"));
+class CondicionalIf extends Instruccion_1.Instruccion {
+    constructor(condicion, instruccionesIf, instruccionesElse, linea, columna) {
         super(new Tipo_1.default(Tipo_1.tipoDato.VOID), linea, columna);
-        this.id = id;
+        this.condicion = condicion;
+        this.instruccionesIf = instruccionesIf;
+        this.instruccionesElse = instruccionesElse;
     }
     interpretar(arbol, tabla) {
-        let valor = tabla.getVariable(this.id);
-        if (valor == null) {
-            return new Errores_1.default("Semantico", "No se puede acceder al valor de esta variable", this.linea, this.columna);
+        let cond = this.condicion.interpretar(arbol, tabla);
+        if (cond instanceof Errores_1.default)
+            return cond;
+        if (this.condicion.tipoDato.getTipo() !== Tipo_1.tipoDato.BOOLEAN) {
+            return new Errores_1.default("Semantico", "La condicion del if debe ser booleana", this.linea, this.columna);
         }
-        this.tipoDato = valor.getTipo();
-        return valor.getValor();
+        if (cond) {
+            for (let i of this.instruccionesIf) {
+                if (i instanceof Instruccion_1.Instruccion) {
+                    let res = i.interpretar(arbol, tabla);
+                    if (res instanceof Errores_1.default)
+                        return res;
+                    if (res instanceof Break_1.default)
+                        return res;
+                }
+            }
+        }
+        else {
+            if (this.instruccionesElse != undefined) {
+                for (let i of this.instruccionesElse) {
+                    if (i instanceof Instruccion_1.Instruccion) {
+                        let res = i.interpretar(arbol, tabla);
+                        if (res instanceof Errores_1.default)
+                            return res;
+                        if (res instanceof Break_1.default)
+                            return res;
+                    }
+                }
+            }
+        }
     }
 }
-exports.default = AccesoVar;
+exports.default = CondicionalIf;

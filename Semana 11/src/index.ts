@@ -7,10 +7,11 @@ class patronInterpreter {
             let parser = require('./controller/analizador/analizador.js')
 
             let entrada = `
-               var a int = 10
-                fmt.println(5 + a )
+               var x int =10
+               if x==10 {
+               fmt.println("si es igual")
+               }
             `
-
             let ast = new Arbol(parser.parse(entrada))
             let tabla = new TablaSimbolo()
 
@@ -25,8 +26,7 @@ class patronInterpreter {
             console.log("CONSOLA:")
             console.log(ast.getConsola())
 
-            console.log("TABLA:")
-            console.log(tabla)
+          
 
         } catch (e: any) {
             console.log(e)
