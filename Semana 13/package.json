@@ -1,0 +1,14 @@
+{
+  "name": "goscript-project",
+  "version": "1.0.0",
+  "description": "GoScript Interpreter with Web Interface",
+  "scripts": {
+    "backend": "cd backend && npm run dev",
+    "frontend": "cd frontend && npm run dev",
+    "jison": "cd backend && npm run jison",
+    "start": "concurrently \"npm run backend\" \"npm run frontend\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
